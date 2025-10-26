@@ -1,4 +1,4 @@
-# Customer Lapse Prediction — Databricks + GitHub Actions
+# Customer Lapse Prediction — Databricks + GitHub Action
 
 Production-ready template for a Customer Lapse Prediction project using **Databricks**, **MLflow**, **Unity Catalog**, **Databricks Asset Bundles (DAB)**, and **GitHub Actions**.
 
