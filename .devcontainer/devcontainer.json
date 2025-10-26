@@ -1,0 +1,6 @@
+{
+  "name": "databricks-ml",
+  "image": "mcr.microsoft.com/devcontainers/python:3.10",
+  "features": {},
+  "postCreateCommand": "pip install -r requirements.txt && pre-commit install"
+}

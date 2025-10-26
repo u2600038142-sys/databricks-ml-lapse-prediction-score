@@ -1,0 +1,46 @@
+name: Deploy PROD
+on:
+  workflow_dispatch:
+    inputs:
+      run_training:
+        description: "Run training after deploy?"
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install databricks-bundle databricks-cli databricks-sdk==0.*
+      - name: Configure Databricks auth (PAT)
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          UC_CATALOG: ${{ secrets.UC_CATALOG }}
+          UC_SCHEMA_PROD: ${{ secrets.UC_SCHEMA_PROD }}
+        run: |
+          echo "Prod auth set"
+      - name: Deploy bundle to PROD
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+          UC_CATALOG: ${{ secrets.UC_CATALOG }}
+          UC_SCHEMA_PROD: ${{ secrets.UC_SCHEMA_PROD }}
+        run: |
+          databricks bundle deploy --target prod
+      - name: Optionally run training job
+        if: ${{ inputs.run_training }}
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks bundle run train_lapse_model --target prod

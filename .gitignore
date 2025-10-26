@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+.venv/
+venv/
+env/
+.env
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# MLflow local runs (dev only)
+mlruns/
